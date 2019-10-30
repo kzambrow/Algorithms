@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Sorting Algorithms | Interactive | Computing</title>
+<link rel="stylesheet" href="theme.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#37143F">
+
+<style>
+#inputs						{width: 580px; display: block; margin-left: auto; margin-right: auto; text-align: center; line-height: 200%}
+#inputs [type~=text]		{width: 26px; text-align: right; font-size: 14px; padding-right: 2px}
+#inputs [type~=text]:focus	{border: 2px solid red}
+#inputs [type~=button]		{font-size: 12px; padding: 3px}
+#cards						{width: 100%; height: 80px; display: block; margin-left: auto; margin-right: auto; text-align: center}
+.card						{width: 8%; margin: 0.4%; height: 37px; border: 1px solid black; color: #000000; background-color: white; border-radius: 10px; display: inline-block; text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: bold; padding-top: 13px}
+.explanation				{display: none}
+#commentary					{float: right; width: 130px; height: 230px; border: 1px solid black; border-radius: 10px; padding: 0px 10px 0px 10px}
+#commentary p				{text-align: left}
+#commentary h3				{line-height: 170%; color: black; font-weight:normal}
+#bubble						{display: block}
+#animation					{margin-right: 160px}
+</style>
+
+<script type="text/javascript">
+<!--
+var a, b, finished, action, fn_name, end, quick_i, shuffle_down;
+var card, comparisons, swaps, operation;
+var interval = 0;
+quickstep = new Array(35);
+
+function slider_support()
+{
+	var i = document.createElement("input");
+	i.setAttribute("type", "range");
+	return i.type != "text";
+}
+
+function validate()
+{
+	var num = document.querySelectorAll('[type~=text]');
+	var i = num.length;
+	var all_OK = true;
+	while(i--) {
+		if(isNaN(num[i].value) || num[i].value == "")
+		{
+			num[i].focus();
+			all_OK = false;
+		}
+	}
+	if(!all_OK) { alert("All of the boxes must contain a number."); }
+	return all_OK;
+}
+
+function randomise()
+{
+	var num = document.querySelectorAll('[type~=text]');
+	var i = num.length;
+	while(i--) {
+		num[i].value = Math.floor((Math.random()*1000));
+	}
+}
+
+function show_explanation()
+{
+	var divs = document.querySelectorAll('.explanation');
+	var i = divs.length;
+	while(i--) {
+		divs[i].style.display = "none";
+	}
+	document.getElementById(document.getElementById("sort_type").value).style.display = "block";
+}
+
+function change_interval()
+{
+	if(interval != 0) { clearInterval(interval); }
+	
+	if(document.getElementById("interval").value != 2500)
+	{
+		if(fn_name > "") { interval = setInterval(next_step, document.getElementById("interval").value); }
+		document.getElementById("next").disabled = true;
+	}
+	else
+	{
+		if(b > 0) { document.getElementById("next").disabled = false; }
+	}
+}
+
+function compare(i, j)
+{
+	comparisons++;
+	for(var n = 0; n < 10; n++)
+	{
+		if(n == i || n == j) { card[n].style.backgroundColor = "#FFFF99"; } else { card[n].style.backgroundColor = "#FFFFFF"; }
+	}
+	document.getElementById("commentary").innerHTML = "<p><strong>Comparisons: " + comparisons + "<br>Swaps: " + swaps + "</strong></p><p>Comparing " + card[i].innerHTML + " and " + card[j].innerHTML + "...</p>";
+	if(eval(card[j].innerHTML) < eval(card[i].innerHTML))
+	{
+		document.getElementById("commentary").innerHTML = document.getElementById("commentary").innerHTML + "<p>" + operation + " required</p>"
+		return true;
+	}
+	else
+	{
+		document.getElementById("commentary").innerHTML = document.getElementById("commentary").innerHTML + "<p>" + operation + " not required</p>"
+		return false;
+	}
+}
+
+function shuffle(first, last)
+{
+	value = new Array(10);
+	for(var i = 0; i < 10; i++)
+	{
+		value[i] = eval(card[i].innerHTML);
+	}
+	
+	if(first < last)
+	{
+		for(i = first; i < last; i++)
+		{
+			card[i].innerHTML = value[i+1];
+		}
+	}
+	else
+	{
+		for(i = first; i > last; i--)
+		{
+			card[i].innerHTML = value[i-1];
+		}
+	}
+	swaps++;
+}
+
+function swap(i, j)
+{
+	swaps++;
+	var temp;
+	document.getElementById("commentary").innerHTML = document.getElementById("commentary").innerHTML + "<p>Swapping " + card[i].innerHTML + " and " + card[j].innerHTML + "</p>";
+	temp = eval(card[j].innerHTML);
+	card[j].innerHTML = eval(card[i].innerHTML);
+	card[i].innerHTML = temp;
+}
+
+function insert(n)
+{
+	swaps++;
+	var inserted = false;
+	var i = n - 1;
+	document.getElementById("commentary").innerHTML = document.getElementById("commentary").innerHTML + "<p>Inserted " + card[n].innerHTML + " into the correct position.</p>";
+	var temp = eval(card[n].innerHTML);
+	card[n].innerHTML = eval(card[i].innerHTML);
+	card[i].style.backgroundColor = "white";
+	while(!inserted)
+	{
+		comparisons++;
+		if(i == 0 || eval(card[i-1].innerHTML) <= temp)
+		{
+			card[i].innerHTML = temp;
+			inserted = true;
+			card[i].style.backgroundColor = "#FFFF99";
+		}
+		else
+		{
+			card[i].innerHTML = eval(card[i-1].innerHTML);
+			i--;
+		}
+	}
+}
+
+
+function insertion()
+{
+	if(a < 8)
+	{
+		a++;
+		b++;
+	}
+	else
+	{
+		if(document.getElementById("interval").value == 2500)
+		{
+			document.getElementById("next").disabled = true;
+		}
+		else
+		{
+			clearInterval(interval);
+			interval = 0;
+		}
+		document.getElementById("commentary").innerHTML = "<h3>The sort is complete - there were " + comparisons + " comparisons and " + swaps + " insertions.</h3>";
+		b = 0;
+	}
+}
+
+
+function next_step()
+{
+	if(action == 1)
+	{
+		if(compare(a, b))
+		{ action = -1; }
+		else
+		{
+			window[fn_name]();
+		}
+	}
+	else
+	{
+		action = 1;
+		insert(b);
+    }
+}
+
+function start_sort()
+{
+	if(validate()) {
+		var num = document.querySelectorAll('[type~=text]');
+		card = document.querySelectorAll('.card');
+		for(var i=0;i<10;i++)
+		{
+			card[i].innerHTML = num[i].value;
+			card[i].style.fontStyle = "normal";
+			card[i].style.color = "black";
+		}
+		if(interval != 0) { clearInterval(interval); interval = 0; }
+		action = 1;
+		finished = true;
+		comparisons = 0;
+		swaps = 0;
+		fn_name = document.getElementById("sort_type").value;
+			a = 0;
+			b = 1;
+			operation = "Insertion";
+			next_step();
+		}
+		document.getElementById("next").onclick = function() { next_step(); };
+		if(document.getElementById("interval").value == 2500)
+		{
+			document.getElementById("next").disabled = false;
+		}
+		else
+		{
+			document.getElementById("next").disabled = true;
+			if(interval == 0)
+			{ 
+				interval = setInterval(next_step, document.getElementById("interval").value);
+			}
+			else
+			{
+				clearInterval(interval);
+				interval = 0;
+			}
+		}
+	}
+
+//-->
+</script>
+</head>
+
+<BODY>
+
+<nav>
+
+<article>
+<header>
+<h1>Sorting Algorithms </h1>
+</header>
+<h3>Insertion Sort</h3>
+<p>In an <em>insertion sort</em>, the item in the array is placed wherever it belongs. This is similar to when are you dealt card and sort them out after, the card is placed
+	wherever it belongs with the need to swap anything </p>
+
+<p>Below is a visual demonstration for a selection sort. This performs the algorithm on an array with 10 elements. The numbers can either be inputted on your own or
+    can be generated randomly. Once placed, the speed in which they get sorted can be altered.
+</p></p>
+<div id="commentary"></div>
+<div id="animation">
+<h3>Inputs</h3>
+<div id="inputs">
+  <input type="text" value="10" maxlength="3">  
+  <input type="text" value="9" maxlength="3">
+  <input type="text" value="8" maxlength="3">
+  <input type="text" value="7" maxlength="3">
+  <input type="text" value="6" maxlength="3">
+  <input type="text" value="5" maxlength="3">
+  <input type="text" value="4" maxlength="3">
+  <input type="text" value="3" maxlength="3">
+  <input type="text" value="2" maxlength="3">
+  <input type="text" value="1" maxlength="3"> <input type="button" value="Random" onClick="randomise();"><br>
+    <em>Algorithm</em>:
+  <select id="sort_type" onChange="show_explanation();">
+  	<option value="insertion">Insertion Sort</option>
+  </select> 
+  <em>Step interval </em>: 
+  <script type="text/javascript">
+<!--
+if(!slider_support())
+{ 
+	document.write('<select id="interval" onChange="change_interval();">');
+  	document.write('<option value="100">0.1s</option>');
+  	document.write('<option value="250">0.25s</option>');
+  	document.write('<option value="500">0.5s</option>');
+  	document.write('<option value="750">0.75s</option>');
+  	document.write('<option value="1000" selected>1.0s</option>');
+  	document.write('<option value="1500">1.5s</option>');
+  	document.write('<option value="2000">2.0s</option>');
+  	document.write('<option value="2500">Manual</option>');
+	document.write('</select>');
+}
+else
+{
+	document.write('<input type="range" min="100" max="2500" id="interval" onInput="change_interval();" onChange="change_interval();" value="1000" style="width: 80px">');
+}
+//-->
+</script>
+  <input name="start" type="button" value="Go!" onClick="start_sort();">
+</div>
+<h3>Demonstration</h3>
+<div id="cards">
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+<div class="card"></div>
+<input type="button" value="Next" id="next" style="margin-top: 10px; display: block; width: 50px; margin-left: auto; margin-right: auto" disabled>
+</div></div>
+
+</article>
+</BODY>
+</HTML>
