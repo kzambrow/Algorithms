@@ -1,0 +1,136 @@
+body{
+	font-family: Calibri;
+	font-size: 18px;
+	line-height: 20px;
+	padding: 0;
+	margin: 0;
+	background-color: #CECECE;
+}
+
+header{
+	background: #DE314D;
+	color:#010101;
+	padding-top: 20px;
+	min-height: 60px;
+	border-bottom: #010101 3px solid;
+}
+
+header a{
+	color:#ffffff;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 16px;
+}
+
+header ul{
+	margin: 10px;
+	padding: 10px;
+}
+
+header li{
+	float:right;
+	display:inline;
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+header #project_name{
+	float: left;
+}
+
+header #project_name h1{
+	margin: 10px;
+}
+
+header nav{
+	float: right;
+	margin-top: 10px;
+}
+
+#banner{
+	min-height: 400px;
+	background: url('./img/background.jpg') no-repeat;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	color: #ffffff;
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+	text-align: center;
+}
+
+#banner h1{
+	margin-top: 150px;
+	font-size: 50px;
+	margin-bottom: 50px;
+}
+
+#banner p{
+	font-size: 20px;
+}
+
+#signup{
+	padding:50px;
+	color: #ffffff;
+	background: #DE314D;
+}
+
+#signup h1{
+	float:left;
+	padding-left:100px;
+}
+
+#signup form {
+	float:right;
+}
+
+#signup input[type="email"]{
+	padding: 4px;
+	height: 25px;
+	width: 300px;
+}
+
+#signup input[type="password"]{
+	padding: 4px;
+	height: 25px;
+	width: 300px;
+}
+
+.button_1{
+	height:35px;
+	background: #CECECE;
+	border: 10;
+	padding-left: 20px;
+	padding-right: 20px;
+	font-size: 18px;
+}
+
+.container{
+	width:80%;
+	margin:auto;
+	overflow:hidden;
+}
+
+#navigation{
+	margin-top: 20px;
+}
+
+#navigation .box{
+	float: left;
+	width: 30%;
+	padding:10px;
+	text-align: center;
+}
+
+#navigation .box img{
+	width: 300px;
+	height: 150px;
+}
+
+footer{
+	padding: 20px;
+	margin-top: 20px;
+	color: #ffffff;
+	background-color: #DE314D;
+	text-align:center;
+}
