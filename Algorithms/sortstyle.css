@@ -1,0 +1,12 @@
+#inputs						{width: 580px; display: block; margin-left: auto; margin-right: auto; text-align: center; line-height: 200%}
+#inputs [type~=text]		{width: 26px; text-align: right; font-size: 14px; padding-right: 2px}
+#inputs [type~=text]:focus	{border: 2px solid red}
+#inputs [type~=button]		{font-size: 12px; padding: 3px}
+#cards						{width: 100%; height: 80px; display: block; margin-left: auto; margin-right: auto; text-align: center}
+.card						{width: 8%; margin: 0.4%; height: 37px; border: 1px solid black; color: #000000; background-color: white; border-radius: 10px; display: inline-block; text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: 20px; font-weight: bold; padding-top: 13px}
+.explanation				{display: none}
+#commentary					{float: right; width: 130px; height: 230px; border: 1px solid black; border-radius: 10px; padding: 0px 10px 0px 10px}
+#commentary p				{text-align: left}
+#commentary h3				{line-height: 170%; color: black; font-weight:normal}
+#bubble						{display: block}
+#animation					{margin-right: 160px}
